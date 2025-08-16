@@ -10,35 +10,28 @@ export default function MobileNavigation({
   activeTab,
   setActiveTab
 }) {
-
+  
   const handleNavigation = (tabId) => {
-    console.log(`Navigating to: ${tabId}`); // For debugging
     setActiveTab(tabId);
     
-    // FIXED: Proper navigation for each icon
+    // FIXED: Proper mapping for each button
     switch(tabId) {
       case 'home':
-        console.log('Home clicked');
         if (onHomeClick) onHomeClick();
         break;
       case 'search':
-        console.log('Search clicked');
         if (onSearchClick) onSearchClick();
         break;
       case 'create':
-        console.log('Create clicked');
         if (onCreateClick) onCreateClick();
         break;
       case 'activity':
-        console.log('Activity clicked');
         if (onActivityClick) onActivityClick();
         break;
       case 'profile':
-        console.log('Profile clicked');
         if (onProfileClick) onProfileClick();
         break;
       default:
-        console.log(`Unknown navigation: ${tabId}`);
         break;
     }
   };

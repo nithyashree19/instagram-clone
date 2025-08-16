@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaGrid, FaUserTag, FaEllipsisH, FaArrowLeft } from 'react-icons/fa';
+import { FaTh, FaUserTag, FaEllipsisH, FaArrowLeft } from 'react-icons/fa';
 
 export default function ProfilePage({ user, onClose, isOpen }) {
   const [activeTab, setActiveTab] = useState('posts');
@@ -72,7 +72,7 @@ export default function ProfilePage({ user, onClose, isOpen }) {
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation - FIXED: Using FaTh instead of FaGrid */}
         <div className="flex border-t border-gray-200">
           <button
             onClick={() => setActiveTab('posts')}
@@ -82,7 +82,7 @@ export default function ProfilePage({ user, onClose, isOpen }) {
                 : 'text-gray-500'
             }`}
           >
-            <FaGrid className="w-5 h-5" />
+            <FaTh className="w-5 h-5" />
           </button>
           <button
             onClick={() => setActiveTab('tagged')}

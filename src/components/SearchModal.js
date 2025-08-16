@@ -5,28 +5,22 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
   const [query, setQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [activeTab, setActiveTab] = useState('top');
   
-  // Sample photo grid for exploration
+  // Sample explore photos for when search is empty
   const explorePhotos = [
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1529502669403-86f198b6587a?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=600&q=80',
+    { id: 1, image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80', likes: 234, comments: 12 },
+    { id: 2, image: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=600&q=80', likes: 456, comments: 23 },
+    { id: 3, image: 'https://images.unsplash.com/photo-1529502669403-86f198b6587a?auto=format&fit=crop&w=600&q=80', likes: 789, comments: 45 },
+    { id: 4, image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80', likes: 123, comments: 8 },
+    { id: 5, image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=600&q=80', likes: 567, comments: 34 },
+    { id: 6, image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80', likes: 890, comments: 56 },
+    { id: 7, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=600&q=80', likes: 345, comments: 19 },
+    { id: 8, image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80', likes: 678, comments: 27 },
+    { id: 9, image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=600&q=80', likes: 234, comments: 15 }
   ];
   
-  const trendingSearches = [
-    { term: 'nature', count: '2.1M posts' },
-    { term: 'sunset', count: '845K posts' },
-    { term: 'friends', count: '1.5M posts' },
-    { term: 'food', count: '3.2M posts' },
-    { term: 'travel', count: '2.8M posts' },
-    { term: 'art', count: '1.1M posts' },
+  const recentSearches = [
+    'nature', 'sunset', 'food', 'travel', 'art', 'friends'
   ];
 
   useEffect(() => {
@@ -36,18 +30,20 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
       return;
     }
 
+    // Filter posts by username or caption
     const postResults = posts.filter(post => 
       post.username.toLowerCase().includes(query.toLowerCase()) ||
       post.caption.toLowerCase().includes(query.toLowerCase())
     );
     
+    // Get unique users
     const userResults = postResults.reduce((acc, post) => {
       const existingUser = acc.find(user => user.username === post.username);
       if (!existingUser) {
         acc.push({
           username: post.username,
           avatar: post.avatar,
-          bio: 'User on Instagram',
+          bio: post.caption.substring(0, 30) + '...',
           followers: Math.floor(Math.random() * 10000)
         });
       }
@@ -65,7 +61,7 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
       {/* Search Header */}
       <div className="flex items-center gap-3 p-4 border-b border-gray-200">
         <div className="flex items-center flex-1 bg-gray-100 rounded-lg px-3 py-2">
-          <FaSearch className="w-4 h-4 text-gray-500 mr-3" />
+          <FaSearch className="w-4 h-4 text-gray-500 mr-2" />
           <input
             type="text"
             value={query}
@@ -82,55 +78,31 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
         </div>
         <button
           onClick={onClose}
-          className="text-gray-900 hover:text-gray-700 p-2"
+          className="text-gray-900 hover:text-gray-700 p-1"
         >
           <FaTimes className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Search Tabs */}
-      {query && (
-        <div className="flex border-b border-gray-200">
-          {['Top', 'Accounts', 'Tags', 'Places'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab.toLowerCase())}
-              className={`flex-1 py-3 text-sm font-medium border-b-2 ${
-                activeTab === tab.toLowerCase()
-                  ? 'border-gray-900 text-gray-900'
-                  : 'border-transparent text-gray-500'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Search Content */}
       <div className="flex-1 overflow-y-auto">
         {query === '' ? (
-          /* No Search Query - Show Explore Grid */
+          /* No Search Query - Show Explore */
           <div>
-            {/* Trending Searches */}
+            {/* Recent Searches */}
             <div className="p-4 border-b border-gray-200">
               <h3 className="font-semibold text-gray-900 mb-3">Recent</h3>
               <div className="space-y-3">
-                {trendingSearches.map((item, index) => (
+                {recentSearches.map((term, index) => (
                   <button
                     key={index}
-                    onClick={() => setQuery(item.term)}
-                    className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg text-left"
+                    onClick={() => setQuery(term)}
+                    className="flex items-center gap-3 w-full p-2 hover:bg-gray-50 rounded-lg text-left"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                        <FaSearch className="w-4 h-4 text-gray-500" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">#{item.term}</p>
-                        <p className="text-sm text-gray-500">{item.count}</p>
-                      </div>
+                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <FaSearch className="w-4 h-4 text-gray-500" />
                     </div>
+                    <span className="text-gray-900">{term}</span>
                   </button>
                 ))}
               </div>
@@ -139,26 +111,26 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
             {/* Explore Photos Grid */}
             <div className="p-1">
               <div className="grid grid-cols-3 gap-1">
-                {explorePhotos.map((photo, index) => (
+                {explorePhotos.map((photo) => (
                   <div
-                    key={index}
+                    key={photo.id}
                     className="aspect-square cursor-pointer hover:opacity-80 transition-opacity relative"
                   >
                     <img
-                      src={photo}
+                      src={photo.image}
                       alt="Explore"
                       className="w-full h-full object-cover"
                     />
-                    {/* Overlay for post stats */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                    {/* Hover overlay with stats */}
+                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity flex items-center justify-center">
                       <div className="flex items-center gap-4 text-white opacity-0 hover:opacity-100 transition-opacity">
                         <div className="flex items-center gap-1">
-                          <FaHeart className="w-5 h-5" />
-                          <span className="font-semibold">{Math.floor(Math.random() * 1000)}</span>
+                          <FaHeart className="w-4 h-4" />
+                          <span className="font-semibold text-sm">{photo.likes}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <FaComment className="w-5 h-5" />
-                          <span className="font-semibold">{Math.floor(Math.random() * 100)}</span>
+                          <FaComment className="w-4 h-4" />
+                          <span className="font-semibold text-sm">{photo.comments}</span>
                         </div>
                       </div>
                     </div>
@@ -170,37 +142,37 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
         ) : (
           /* Search Results */
           <div>
-            {activeTab === 'accounts' || activeTab === 'top' ? (
-              filteredUsers.length > 0 && (
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-3">Accounts</h3>
-                  <div className="space-y-3">
-                    {filteredUsers.map((user, index) => (
-                      <button
-                        key={index}
-                        onClick={() => onProfileClick(user)}
-                        className="flex items-center gap-3 w-full p-2 hover:bg-gray-50 rounded-lg text-left"
-                      >
-                        <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-yellow-400 via-red-500 to-pink-500">
-                          <img
-                            src={user.avatar}
-                            alt={user.username}
-                            className="w-full h-full rounded-full object-cover border border-white"
-                          />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">{user.username}</p>
-                          <p className="text-sm text-gray-500">{user.followers.toLocaleString()} followers</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+            {/* Users Section */}
+            {filteredUsers.length > 0 && (
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Accounts</h3>
+                <div className="space-y-3">
+                  {filteredUsers.map((user, index) => (
+                    <button
+                      key={index}
+                      onClick={() => onProfileClick(user)}
+                      className="flex items-center gap-3 w-full p-2 hover:bg-gray-50 rounded-lg text-left"
+                    >
+                      <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-yellow-400 via-red-500 to-pink-500">
+                        <img
+                          src={user.avatar}
+                          alt={user.username}
+                          className="w-full h-full rounded-full object-cover border border-white"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{user.username}</p>
+                        <p className="text-sm text-gray-500">{user.followers.toLocaleString()} followers</p>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              )
-            ) : null}
+              </div>
+            )}
 
-            {(activeTab === 'top' || activeTab === 'tags') && filteredPosts.length > 0 && (
-              <div className="p-1 border-t border-gray-200">
+            {/* Posts Grid */}
+            {filteredPosts.length > 0 && (
+              <div className="p-1">
                 <div className="grid grid-cols-3 gap-1">
                   {filteredPosts.map((post) => (
                     <div
@@ -213,7 +185,7 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
                         alt="Post"
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity flex items-center justify-center">
                         <div className="flex items-center gap-4 text-white opacity-0 hover:opacity-100 transition-opacity">
                           <div className="flex items-center gap-1">
                             <FaHeart className="w-4 h-4" />
@@ -227,6 +199,7 @@ export default function SearchModal({ isOpen, onClose, posts, onProfileClick }) 
               </div>
             )}
 
+            {/* No Results */}
             {query && filteredUsers.length === 0 && filteredPosts.length === 0 && (
               <div className="p-8 text-center">
                 <p className="text-gray-500 mb-2">No results found</p>

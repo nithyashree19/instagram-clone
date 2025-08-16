@@ -8,31 +8,34 @@ import MobileHeader from './components/MobileHeader';
 import StoryModal from './components/StoryModal';
 import ProfileModal from './components/ProfileModal';
 import SearchModal from './components/SearchModal';
-import ProfilePage from './components/ProfilePage'; // NEW IMPORT
+import ProfilePage from './components/ProfilePage';
 import { stories, posts, suggested } from './data/mockData';
 
 export default function App() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
-  const [showProfilePage, setShowProfilePage] = useState(false); // NEW STATE
-  const [currentUser, setCurrentUser] = useState({
+  const [showProfilePage, setShowProfilePage] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
+  
+  const currentUser = {
     username: 'sumithra',
     avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
     bio: 'Travel enthusiast 🌍 | Photography lover 📸',
     posts: 127,
     followers: 1245,
     following: 389
-  });
+  };
 
   const handleStoryClick = (story) => {
     setSelectedStory(story);
   };
 
   const handleProfileClick = (user) => {
-    // Check if it's mobile and user is viewing their own profile
+    // Check if it's mobile and user's own profile
     if (window.innerWidth < 1024 && user.username === 'sumithra') {
       setShowProfilePage(true);
+      setActiveTab('profile');
     } else {
       setSelectedProfile(user);
     }
@@ -40,6 +43,7 @@ export default function App() {
 
   const handleSearchClick = () => {
     setShowSearch(true);
+    setActiveTab('search');
   };
 
   const closeModal = () => {
@@ -47,6 +51,7 @@ export default function App() {
     setSelectedProfile(null);
     setShowSearch(false);
     setShowProfilePage(false);
+    setActiveTab('home');
   };
 
   return (
@@ -88,7 +93,7 @@ export default function App() {
       
       {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="pt-14 pb-20">
+        <div className="pt-14 pb-16">
           <div className="max-w-md mx-auto px-4 py-4">
             <Stories stories={stories} onStoryClick={handleStoryClick} />
             <div className="mt-6 space-y-6">
@@ -105,6 +110,8 @@ export default function App() {
         <MobileNavigation 
           onSearchClick={handleSearchClick}
           onProfileClick={handleProfileClick}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
       </div>
 
@@ -130,13 +137,11 @@ export default function App() {
         onProfileClick={handleProfileClick}
       />
 
-      {/* Mobile Profile Page - NEW */}
-      {showProfilePage && (
-        <ProfilePage
-          user={currentUser}
-          onClose={closeModal}
-        />
-      )}
+      <ProfilePage
+        user={currentUser}
+        onClose={closeModal}
+        isOpen={showProfilePage}
+      />
     </div>
   );
 }

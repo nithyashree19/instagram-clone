@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { FaGrid, FaUserTag, FaCog, FaPlus, FaEllipsisH } from 'react-icons/fa';
+import { FaGrid, FaUserTag, FaEllipsisH, FaArrowLeft } from 'react-icons/fa';
 
-export default function ProfilePage({ user, onClose }) {
+export default function ProfilePage({ user, onClose, isOpen }) {
   const [activeTab, setActiveTab] = useState('posts');
+  
+  if (!isOpen) return null;
   
   const userPosts = [
     'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
@@ -14,13 +16,11 @@ export default function ProfilePage({ user, onClose }) {
   ];
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col lg:hidden">
+    <div className="lg:hidden fixed inset-0 bg-white z-50 flex flex-col">
       {/* Profile Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <button onClick={onClose}>
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+        <button onClick={onClose} className="p-1">
+          <FaArrowLeft className="w-5 h-5 text-gray-900" />
         </button>
         <span className="font-semibold text-gray-900">{user?.username || 'sumithra'}</span>
         <button>
@@ -40,7 +40,7 @@ export default function ProfilePage({ user, onClose }) {
               />
             </div>
             <div className="flex-1">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center">
                 <div className="text-center">
                   <div className="font-semibold text-lg">{user?.posts || 127}</div>
                   <div className="text-gray-500 text-sm">Posts</div>
@@ -62,33 +62,18 @@ export default function ProfilePage({ user, onClose }) {
             <p className="text-gray-600 text-sm mt-1">{user?.bio || 'Travel enthusiast 🌍 | Photography lover 📸'}</p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-4">
             <button className="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg">
               Edit Profile
             </button>
             <button className="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg">
               Share Profile
             </button>
-            <button className="bg-gray-200 text-gray-900 p-2 rounded-lg">
-              <FaUserTag className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Stories Highlights */}
-        <div className="px-4 py-2">
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-            <div className="flex flex-col items-center flex-shrink-0">
-              <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center bg-gray-100">
-                <FaPlus className="w-6 h-6 text-gray-500" />
-              </div>
-              <span className="text-xs text-gray-500 mt-1">New</span>
-            </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-t border-gray-200 mt-4">
+        <div className="flex border-t border-gray-200">
           <button
             onClick={() => setActiveTab('posts')}
             className={`flex-1 py-3 flex items-center justify-center ${

@@ -1,25 +1,95 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Sidebar from './components/Sidebar';
+import Stories from './components/Stories';
+import Post from './components/Post';
+import Suggestions from './components/Suggestions';
+import MobileNavigation from './components/MobileNavigation';
+import StoryModal from './components/StoryModal';
+import ProfileModal from './components/ProfileModal';
+import { stories, posts, suggested } from './data/mockData';
 
-function App() {
+export default function App() {
+  const [selectedStory, setSelectedStory] = useState(null);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+
+  const handleStoryClick = (story) => {
+    setSelectedStory(story);
+  };
+
+  const handleProfileClick = (user) => {
+    setSelectedProfile(user);
+  };
+
+  const closeModal = () => {
+    setSelectedStory(null);
+    setSelectedProfile(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-gray-50 min-h-screen">
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex max-w-7xl mx-auto bg-gray-50">
+        {/* Left Sidebar */}
+        <div className="sticky top-0 h-screen">
+          <Sidebar />
+        </div>
+        
+        {/* Main Content */}
+        <div className="flex-1 max-w-2xl mx-auto px-8 py-8">
+          <div className="space-y-6">
+            <Stories stories={stories} onStoryClick={handleStoryClick} />
+            <div className="space-y-6">
+              {posts.map(post => (
+                <Post 
+                  key={post.id} 
+                  post={post} 
+                  onProfileClick={handleProfileClick}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Right Sidebar - Suggestions */}
+        <div className="w-80 py-8">
+          <Suggestions 
+            suggested={suggested} 
+            onProfileClick={handleProfileClick}
+          />
+        </div>
+      </div>
+      
+      {/* Mobile Layout */}
+      <div className="lg:hidden">
+        <div className="max-w-md mx-auto px-4 py-4 pb-16">
+          <Stories stories={stories} onStoryClick={handleStoryClick} />
+          <div className="mt-6 space-y-6">
+            {posts.map(post => (
+              <Post 
+                key={post.id} 
+                post={post} 
+                onProfileClick={handleProfileClick}
+              />
+            ))}
+          </div>
+        </div>
+        <MobileNavigation />
+      </div>
+
+      {/* Modals */}
+      {selectedStory && (
+        <StoryModal 
+          story={selectedStory} 
+          onClose={closeModal}
+        />
+      )}
+      
+      {selectedProfile && (
+        <ProfileModal 
+          user={selectedProfile} 
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 }
-
-export default App;

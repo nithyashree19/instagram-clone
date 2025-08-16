@@ -9,6 +9,7 @@ import StoryModal from './components/StoryModal';
 import ProfileModal from './components/ProfileModal';
 import SearchModal from './components/SearchModal';
 import ProfilePage from './components/ProfilePage';
+import ReelsPage from './components/ReelsPage'; // NEW IMPORT
 import { stories, posts, suggested } from './data/mockData';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showProfilePage, setShowProfilePage] = useState(false);
+  const [showReels, setShowReels] = useState(false); // NEW STATE
   const [activeTab, setActiveTab] = useState('home');
   
   const currentUser = {
@@ -32,8 +34,7 @@ export default function App() {
   };
 
   const handleProfileClick = (user) => {
-    // Check if it's mobile and user's own profile
-    if (window.innerWidth < 1024 && user.username === 'sumithra') {
+    if (window.innerWidth < 1024) {
       setShowProfilePage(true);
       setActiveTab('profile');
     } else {
@@ -46,11 +47,28 @@ export default function App() {
     setActiveTab('search');
   };
 
+  // FIXED: New handlers for navigation
+  const handleReelsClick = () => {
+    setShowReels(true);
+    setActiveTab('reels');
+  };
+
+  const handleCreateClick = () => {
+    alert('Create functionality coming soon!');
+    setActiveTab('create');
+  };
+
+  const handleHomeClick = () => {
+    closeModal();
+    setActiveTab('home');
+  };
+
   const closeModal = () => {
     setSelectedStory(null);
     setSelectedProfile(null);
     setShowSearch(false);
     setShowProfilePage(false);
+    setShowReels(false);
     setActiveTab('home');
   };
 
@@ -107,11 +125,14 @@ export default function App() {
             </div>
           </div>
         </div>
+        
+        {/* FIXED: Mobile Navigation with proper mapping */}
         <MobileNavigation 
           onSearchClick={handleSearchClick}
-          onProfileClick={handleProfileClick}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          onProfileClick={() => handleProfileClick(currentUser)}
+          onReelsClick={handleReelsClick}
+          onCreateClick={handleCreateClick}
+          onHomeClick={handleHomeClick}
         />
       </div>
 
@@ -141,6 +162,12 @@ export default function App() {
         user={currentUser}
         onClose={closeModal}
         isOpen={showProfilePage}
+      />
+
+      {/* NEW: Reels Page */}
+      <ReelsPage
+        isOpen={showReels}
+        onClose={closeModal}
       />
     </div>
   );

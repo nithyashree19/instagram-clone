@@ -36,19 +36,25 @@ export default function MobileHeader({ suggested, onProfileClick }) {
     touchStartX.current = null;
   };
 
+  // FIXED: Only show suggestions on swipe, not on menu button click
+  const handleMenuClick = () => {
+    // Do nothing on menu click - only respond to swipe
+    console.log('Menu clicked - use swipe to open suggestions');
+  };
+
   return (
     <>
-      {/* Mobile Header with Instagram Name */}
+      {/* Mobile Header */}
       <header 
-        className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50 safe-area-pt"
+        className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <button
-          onClick={() => setShowSuggestions(!showSuggestions)}
+          onClick={handleMenuClick} // FIXED: No longer opens suggestions
           className="p-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Toggle suggestions"
+          aria-label="Menu (swipe right for suggestions)"
         >
           <FaBars className="w-5 h-5 text-gray-900" />
         </button>
@@ -72,14 +78,13 @@ export default function MobileHeader({ suggested, onProfileClick }) {
         />
       )}
 
-      {/* Suggestions Drawer */}
+      {/* Suggestions Drawer - ONLY opens on swipe */}
       <div
         className={`lg:hidden fixed top-14 right-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
           showSuggestions ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="p-4 h-full overflow-y-auto">
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">Suggestions for you</h2>
             <button
@@ -115,9 +120,6 @@ export default function MobileHeader({ suggested, onProfileClick }) {
                 <p className="text-xs text-gray-500">Your profile</p>
               </div>
             </div>
-            <button className="text-sm text-blue-500 font-semibold">
-              Switch
-            </button>
           </div>
 
           {/* Suggested Users */}
@@ -152,24 +154,6 @@ export default function MobileHeader({ suggested, onProfileClick }) {
                 </button>
               </div>
             ))}
-          </div>
-
-          {/* Footer */}
-          <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-400 space-y-2">
-            <div className="flex flex-wrap gap-3">
-              <span>About</span>
-              <span>Help</span>
-              <span>Press</span>
-              <span>API</span>
-              <span>Jobs</span>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <span>Privacy</span>
-              <span>Terms</span>
-              <span>Locations</span>
-              <span>Language</span>
-            </div>
-            <p className="mt-4">© 2025 Instagram Clone</p>
           </div>
         </div>
       </div>

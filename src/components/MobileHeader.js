@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaRegPaperPlane } from 'react-icons/fa';
 
 export default function MobileHeader({ suggested, onProfileClick }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -40,7 +40,7 @@ export default function MobileHeader({ suggested, onProfileClick }) {
     <>
       {/* Mobile Header with Instagram Name */}
       <header 
-        className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50"
+        className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50 safe-area-pt"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -53,9 +53,14 @@ export default function MobileHeader({ suggested, onProfileClick }) {
           <FaBars className="w-5 h-5 text-gray-900" />
         </button>
 
-        <h1 className="text-xl font-bold text-gray-900 select-none">Instagram</h1>
+        <h1 className="text-xl font-bold text-gray-900 select-none tracking-wide">Instagram</h1>
         
-        <div className="w-9"></div> {/* Spacer for center alignment */}
+        <button
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          aria-label="Direct messages"
+        >
+          <FaRegPaperPlane className="w-5 h-5 text-gray-900" />
+        </button>
       </header>
 
       {/* Overlay */}
@@ -79,7 +84,7 @@ export default function MobileHeader({ suggested, onProfileClick }) {
             <h2 className="text-lg font-semibold text-gray-900">Suggestions for you</h2>
             <button
               onClick={() => setShowSuggestions(false)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 p-1"
             >
               ✕
             </button>

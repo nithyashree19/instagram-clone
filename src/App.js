@@ -8,19 +8,34 @@ import MobileHeader from './components/MobileHeader';
 import StoryModal from './components/StoryModal';
 import ProfileModal from './components/ProfileModal';
 import SearchModal from './components/SearchModal';
+import ProfilePage from './components/ProfilePage'; // NEW IMPORT
 import { stories, posts, suggested } from './data/mockData';
 
 export default function App() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
+  const [showProfilePage, setShowProfilePage] = useState(false); // NEW STATE
+  const [currentUser, setCurrentUser] = useState({
+    username: 'sumithra',
+    avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
+    bio: 'Travel enthusiast 🌍 | Photography lover 📸',
+    posts: 127,
+    followers: 1245,
+    following: 389
+  });
 
   const handleStoryClick = (story) => {
     setSelectedStory(story);
   };
 
   const handleProfileClick = (user) => {
-    setSelectedProfile(user);
+    // Check if it's mobile and user is viewing their own profile
+    if (window.innerWidth < 1024 && user.username === 'sumithra') {
+      setShowProfilePage(true);
+    } else {
+      setSelectedProfile(user);
+    }
   };
 
   const handleSearchClick = () => {
@@ -31,6 +46,7 @@ export default function App() {
     setSelectedStory(null);
     setSelectedProfile(null);
     setShowSearch(false);
+    setShowProfilePage(false);
   };
 
   return (
@@ -43,12 +59,10 @@ export default function App() {
 
       {/* Desktop Layout */}
       <div className="hidden lg:flex max-w-7xl mx-auto bg-gray-50">
-        {/* Left Sidebar */}
         <div className="sticky top-0 h-screen">
           <Sidebar onSearchClick={handleSearchClick} />
         </div>
         
-        {/* Main Content */}
         <div className="flex-1 max-w-2xl mx-auto px-8 py-8">
           <div className="space-y-6">
             <Stories stories={stories} onStoryClick={handleStoryClick} />
@@ -64,7 +78,6 @@ export default function App() {
           </div>
         </div>
         
-        {/* Right Sidebar - Suggestions */}
         <div className="w-80 py-8">
           <Suggestions 
             suggested={suggested} 
@@ -73,9 +86,9 @@ export default function App() {
         </div>
       </div>
       
-      {/* Mobile Layout - FIXED SPACING */}
+      {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="pt-14 pb-20"> {/* Fixed padding: pt-14 for header, pb-20 for bottom nav */}
+        <div className="pt-14 pb-20">
           <div className="max-w-md mx-auto px-4 py-4">
             <Stories stories={stories} onStoryClick={handleStoryClick} />
             <div className="mt-6 space-y-6">
@@ -89,7 +102,10 @@ export default function App() {
             </div>
           </div>
         </div>
-        <MobileNavigation onSearchClick={handleSearchClick} />
+        <MobileNavigation 
+          onSearchClick={handleSearchClick}
+          onProfileClick={handleProfileClick}
+        />
       </div>
 
       {/* Modals */}
@@ -100,20 +116,27 @@ export default function App() {
         />
       )}
       
-      {selectedProfile && (
+      {selectedProfile && !showProfilePage && (
         <ProfileModal 
           user={selectedProfile} 
           onClose={closeModal}
         />
       )}
 
-      {/* Search Modal */}
       <SearchModal
         isOpen={showSearch}
         onClose={closeModal}
         posts={posts}
         onProfileClick={handleProfileClick}
       />
+
+      {/* Mobile Profile Page - NEW */}
+      {showProfilePage && (
+        <ProfilePage
+          user={currentUser}
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 }

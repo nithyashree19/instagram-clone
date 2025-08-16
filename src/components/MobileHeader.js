@@ -25,8 +25,8 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
     const currentX = e.touches.clientX;
     const deltaX = currentX - touchStartX.current;
     
-    // Swipe right to open navigation from LEFT side
-    if (deltaX > 100) {
+    // Swipe left to open navigation from right
+    if (deltaX < -100) {
       setShowNavigation(true);
       touchStartX.current = null;
     }
@@ -36,7 +36,7 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
     touchStartX.current = null;
   };
 
-  // Menu button opens LEFT navigation
+  // Menu button opens right navigation
   const handleMenuClick = () => {
     setShowNavigation(true);
   };
@@ -54,29 +54,35 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
 
   return (
     <>
-      {/* Mobile Header */}
+      {/* Mobile Header - MENU MOVED TO RIGHT */}
       <header 
         className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <button
-          onClick={handleMenuClick}
-          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Open menu"
-        >
-          <FaBars className="w-5 h-5 text-gray-900" />
-        </button>
+        {/* Left side - Instagram logo */}
+        <div className="flex items-center">
+          <h1 className="text-xl font-bold text-gray-900 select-none tracking-wide">Instagram</h1>
+        </div>
 
-        <h1 className="text-xl font-bold text-gray-900 select-none tracking-wide">Instagram</h1>
-        
-        <button
-          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Direct messages"
-        >
-          <FaRegPaperPlane className="w-5 h-5 text-gray-900" />
-        </button>
+        {/* Right side - Menu and Messages */}
+        <div className="flex items-center gap-2">
+          <button
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Direct messages"
+          >
+            <FaRegPaperPlane className="w-5 h-5 text-gray-900" />
+          </button>
+          
+          <button
+            onClick={handleMenuClick}
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Open menu"
+          >
+            <FaBars className="w-5 h-5 text-gray-900" />
+          </button>
+        </div>
       </header>
 
       {/* Overlay */}
@@ -88,10 +94,10 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
         />
       )}
 
-      {/* MOVED BACK TO LEFT SIDE: Navigation Menu */}
+      {/* Navigation Menu - Slides from RIGHT */}
       <div
-        className={`lg:hidden fixed top-0 left-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-          showNavigation ? 'translate-x-0' : '-translate-x-full'
+        className={`lg:hidden fixed top-0 right-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          showNavigation ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="p-4 h-full overflow-y-auto">

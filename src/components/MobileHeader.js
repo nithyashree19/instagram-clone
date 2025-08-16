@@ -25,8 +25,8 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
     const currentX = e.touches.clientX;
     const deltaX = currentX - touchStartX.current;
     
-    // Swipe right to open navigation
-    if (deltaX > 100) {
+    // Swipe left to open navigation from right
+    if (deltaX < -100) {
       setShowNavigation(true);
       touchStartX.current = null;
     }
@@ -36,7 +36,7 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
     touchStartX.current = null;
   };
 
-  // Menu button opens left navigation
+  // Menu button opens right navigation
   const handleMenuClick = () => {
     setShowNavigation(true);
   };
@@ -88,10 +88,10 @@ export default function MobileHeader({ suggested, onProfileClick, onSearchClick 
         />
       )}
 
-      {/* Left Side Navigation Menu */}
+      {/* MOVED TO RIGHT SIDE: Navigation Menu */}
       <div
-        className={`lg:hidden fixed top-0 left-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-          showNavigation ? 'translate-x-0' : '-translate-x-full'
+        className={`lg:hidden fixed top-0 right-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          showNavigation ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="p-4 h-full overflow-y-auto">

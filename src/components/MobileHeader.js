@@ -36,10 +36,10 @@ export default function MobileHeader({ suggested, onProfileClick }) {
     touchStartX.current = null;
   };
 
-  // FIXED: Only show suggestions on swipe, not on menu button click
+  // FIXED: Menu button now opens left navigation
   const handleMenuClick = () => {
-    // Do nothing on menu click - only respond to swipe
-    console.log('Menu clicked - use swipe to open suggestions');
+    setShowSuggestions(true);
+    console.log('Menu clicked - opening left navigation');
   };
 
   return (
@@ -52,9 +52,9 @@ export default function MobileHeader({ suggested, onProfileClick }) {
         onTouchEnd={handleTouchEnd}
       >
         <button
-          onClick={handleMenuClick}
+          onClick={handleMenuClick} // FIXED: Now opens left navigation
           className="p-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Menu (swipe right for suggestions)"
+          aria-label="Open menu"
         >
           <FaBars className="w-5 h-5 text-gray-900" />
         </button>
@@ -78,7 +78,7 @@ export default function MobileHeader({ suggested, onProfileClick }) {
         />
       )}
 
-      {/* FIXED: Suggestions Drawer - NOW SLIDES FROM LEFT SIDE */}
+      {/* Left Navigation Drawer - Opens with menu button OR swipe */}
       <div
         className={`lg:hidden fixed top-14 left-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
           showSuggestions ? 'translate-x-0' : '-translate-x-full'

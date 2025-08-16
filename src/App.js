@@ -9,7 +9,9 @@ import StoryModal from './components/StoryModal';
 import ProfileModal from './components/ProfileModal';
 import SearchModal from './components/SearchModal';
 import ProfilePage from './components/ProfilePage';
-import ReelsPage from './components/ReelsPage'; // NEW IMPORT
+import ReelsPage from './components/ReelsPage';
+import ActivityPage from './components/ActivityPage'; // NEW IMPORT
+import CreatePage from './components/CreatePage'; // NEW IMPORT
 import { stories, posts, suggested } from './data/mockData';
 
 export default function App() {
@@ -17,7 +19,9 @@ export default function App() {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showProfilePage, setShowProfilePage] = useState(false);
-  const [showReels, setShowReels] = useState(false); // NEW STATE
+  const [showReels, setShowReels] = useState(false);
+  const [showActivity, setShowActivity] = useState(false); // NEW STATE
+  const [showCreate, setShowCreate] = useState(false); // NEW STATE
   const [activeTab, setActiveTab] = useState('home');
   
   const currentUser = {
@@ -42,25 +46,35 @@ export default function App() {
     }
   };
 
+  // FIXED: Proper navigation handlers
+  const handleHomeClick = () => {
+    closeModal();
+    setActiveTab('home');
+  };
+
   const handleSearchClick = () => {
     setShowSearch(true);
     setActiveTab('search');
   };
 
-  // FIXED: New handlers for navigation
-  const handleReelsClick = () => {
-    setShowReels(true);
-    setActiveTab('reels');
-  };
-
   const handleCreateClick = () => {
-    alert('Create functionality coming soon!');
+    setShowCreate(true);
     setActiveTab('create');
   };
 
-  const handleHomeClick = () => {
-    closeModal();
-    setActiveTab('home');
+  const handleActivityClick = () => {
+    setShowActivity(true);
+    setActiveTab('activity');
+  };
+
+  const handleProfilePageClick = () => {
+    setShowProfilePage(true);
+    setActiveTab('profile');
+  };
+
+  const handleReelsClick = () => {
+    setShowReels(true);
+    setActiveTab('reels');
   };
 
   const closeModal = () => {
@@ -69,6 +83,8 @@ export default function App() {
     setShowSearch(false);
     setShowProfilePage(false);
     setShowReels(false);
+    setShowActivity(false);
+    setShowCreate(false);
     setActiveTab('home');
   };
 
@@ -126,17 +142,19 @@ export default function App() {
           </div>
         </div>
         
-        {/* FIXED: Mobile Navigation with proper mapping */}
+        {/* FIXED: Mobile Navigation with proper handlers */}
         <MobileNavigation 
-          onSearchClick={handleSearchClick}
-          onProfileClick={() => handleProfileClick(currentUser)}
-          onReelsClick={handleReelsClick}
-          onCreateClick={handleCreateClick}
           onHomeClick={handleHomeClick}
+          onSearchClick={handleSearchClick}
+          onCreateClick={handleCreateClick}
+          onActivityClick={handleActivityClick}
+          onProfileClick={handleProfilePageClick}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
       </div>
 
-      {/* Modals */}
+      {/* All Modals */}
       {selectedStory && (
         <StoryModal 
           story={selectedStory} 
@@ -164,9 +182,19 @@ export default function App() {
         isOpen={showProfilePage}
       />
 
-      {/* NEW: Reels Page */}
       <ReelsPage
         isOpen={showReels}
+        onClose={closeModal}
+      />
+
+      {/* NEW: Activity and Create Pages */}
+      <ActivityPage
+        isOpen={showActivity}
+        onClose={closeModal}
+      />
+
+      <CreatePage
+        isOpen={showCreate}
         onClose={closeModal}
       />
     </div>

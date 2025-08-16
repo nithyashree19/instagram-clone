@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FaBars, FaRegPaperPlane } from 'react-icons/fa';
+import { FaBars, FaRegPaperPlane, FaTimes } from 'react-icons/fa';
 
 export default function MobileHeader({ suggested, onProfileClick }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -52,7 +52,7 @@ export default function MobileHeader({ suggested, onProfileClick }) {
         onTouchEnd={handleTouchEnd}
       >
         <button
-          onClick={handleMenuClick} // FIXED: No longer opens suggestions
+          onClick={handleMenuClick}
           className="p-2 rounded-md hover:bg-gray-100 transition-colors"
           aria-label="Menu (swipe right for suggestions)"
         >
@@ -78,10 +78,10 @@ export default function MobileHeader({ suggested, onProfileClick }) {
         />
       )}
 
-      {/* Suggestions Drawer - ONLY opens on swipe */}
+      {/* FIXED: Suggestions Drawer - NOW SLIDES FROM LEFT SIDE */}
       <div
-        className={`lg:hidden fixed top-14 right-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-          showSuggestions ? 'translate-x-0' : 'translate-x-full'
+        className={`lg:hidden fixed top-14 left-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          showSuggestions ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="p-4 h-full overflow-y-auto">
@@ -91,7 +91,7 @@ export default function MobileHeader({ suggested, onProfileClick }) {
               onClick={() => setShowSuggestions(false)}
               className="text-gray-500 hover:text-gray-700 p-1"
             >
-              ✕
+              <FaTimes className="w-5 h-5" />
             </button>
           </div>
 
@@ -154,6 +154,24 @@ export default function MobileHeader({ suggested, onProfileClick }) {
                 </button>
               </div>
             ))}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-400 space-y-2">
+            <div className="flex flex-wrap gap-3">
+              <span>About</span>
+              <span>Help</span>
+              <span>Press</span>
+              <span>API</span>
+              <span>Jobs</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <span>Privacy</span>
+              <span>Terms</span>
+              <span>Locations</span>
+              <span>Language</span>
+            </div>
+            <p className="mt-4">© 2025 Instagram Clone</p>
           </div>
         </div>
       </div>

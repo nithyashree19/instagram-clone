@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { FaHome, FaSearch, FaYoutube, FaPlusCircle, FaUser } from 'react-icons/fa';
+import { FaHome, FaSearch, FaPlusCircle, FaHeart, FaUser } from 'react-icons/fa';
 
 export default function MobileNavigation({ 
+  onHomeClick,
   onSearchClick, 
-  onProfileClick, 
-  onReelsClick, 
   onCreateClick,
-  onHomeClick 
+  onActivityClick,
+  onProfileClick,
+  activeTab,
+  setActiveTab
 }) {
-  const [activeTab, setActiveTab] = useState('home');
 
   const handleNavigation = (tabId) => {
+    console.log(`Navigating to: ${tabId}`); // For debugging
     setActiveTab(tabId);
     
-    // FIXED: Proper mapping for each button
+    // FIXED: Proper navigation for each icon
     switch(tabId) {
       case 'home':
         console.log('Home clicked');
@@ -23,20 +25,20 @@ export default function MobileNavigation({
         console.log('Search clicked');
         if (onSearchClick) onSearchClick();
         break;
-      case 'reels':
-        console.log('Reels clicked');
-        if (onReelsClick) onReelsClick();
-        break;
       case 'create':
         console.log('Create clicked');
         if (onCreateClick) onCreateClick();
+        break;
+      case 'activity':
+        console.log('Activity clicked');
+        if (onActivityClick) onActivityClick();
         break;
       case 'profile':
         console.log('Profile clicked');
         if (onProfileClick) onProfileClick();
         break;
       default:
-        console.log(`Unknown tab: ${tabId}`);
+        console.log(`Unknown navigation: ${tabId}`);
         break;
     }
   };
@@ -44,8 +46,8 @@ export default function MobileNavigation({
   const navItems = [
     { id: 'home', icon: FaHome, label: 'Home' },
     { id: 'search', icon: FaSearch, label: 'Search' },
-    { id: 'reels', icon: FaYoutube, label: 'Reels' },
     { id: 'create', icon: FaPlusCircle, label: 'Create' },
+    { id: 'activity', icon: FaHeart, label: 'Activity' },
     { id: 'profile', icon: FaUser, label: 'Profile' },
   ];
 

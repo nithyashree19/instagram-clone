@@ -9,7 +9,7 @@ export default function Suggestions({ suggested, onProfileClick }) {
   const [currentUser, setCurrentUser] = useState({
     username: 'sumithra',
     avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
-    bio: 'Travel enthusiast 🌍 | Photography lover 📸',
+    bio: 'Travel enthusiast 🌍 ',
     posts: 127,
     followers: 1245,
     following: 389

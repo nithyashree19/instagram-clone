@@ -91,10 +91,11 @@ export default function App() {
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Mobile Header */}
-      <MobileHeader 
-        suggested={suggested}
-        onProfileClick={handleProfileClick}
-      />
+     <MobileHeader 
+  suggested={suggested}
+  onProfileClick={handleProfileClick}
+  onSearchClick={handleSearchClick} // ADD THIS LINE
+/>
 
       {/* Desktop Layout */}
       <div className="hidden lg:flex max-w-7xl mx-auto bg-gray-50">

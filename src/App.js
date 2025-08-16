@@ -4,6 +4,7 @@ import Stories from './components/Stories';
 import Post from './components/Post';
 import Suggestions from './components/Suggestions';
 import MobileNavigation from './components/MobileNavigation';
+import MobileHeader from './components/MobileHeader'; // NEW IMPORT - Replace MobileSidebar
 import StoryModal from './components/StoryModal';
 import ProfileModal from './components/ProfileModal';
 import { stories, posts, suggested } from './data/mockData';
@@ -27,6 +28,12 @@ export default function App() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      {/* Mobile Header - NEW ADDITION */}
+      <MobileHeader 
+        suggested={suggested}
+        onProfileClick={handleProfileClick}
+      />
+
       {/* Desktop Layout */}
       <div className="hidden lg:flex max-w-7xl mx-auto bg-gray-50">
         {/* Left Sidebar */}
@@ -59,9 +66,9 @@ export default function App() {
         </div>
       </div>
       
-      {/* Mobile Layout */}
+      {/* Mobile Layout - Updated with top padding for header */}
       <div className="lg:hidden">
-        <div className="max-w-md mx-auto px-4 py-4 pb-16">
+        <div className="max-w-md mx-auto px-4 py-4 pb-16 pt-16"> {/* pt-16 for header space */}
           <Stories stories={stories} onStoryClick={handleStoryClick} />
           <div className="mt-6 space-y-6">
             {posts.map(post => (

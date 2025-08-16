@@ -1,0 +1,173 @@
+import React, { useState, useRef } from 'react';
+import { FaBars } from 'react-icons/fa';
+
+export default function MobileHeader({ suggested, onProfileClick }) {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [followStates, setFollowStates] = useState(
+    suggested.reduce((acc, user) => ({ ...acc, [user.id]: false }), {})
+  );
+  const touchStartX = useRef(null);
+
+  const toggleFollow = (userId) => {
+    setFollowStates(prev => ({
+      ...prev,
+      [userId]: !prev[userId]
+    }));
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartX.current === null) return;
+    
+    const currentX = e.touches.clientX;
+    const deltaX = currentX - touchStartX.current;
+    
+    // Swipe right to open suggestions
+    if (deltaX > 100) {
+      setShowSuggestions(true);
+      touchStartX.current = null;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartX.current = null;
+  };
+
+  return (
+    <>
+      {/* Mobile Header with Instagram Name */}
+      <header 
+        className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 flex justify-between items-center h-14 px-4 z-50"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <button
+          onClick={() => setShowSuggestions(!showSuggestions)}
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          aria-label="Toggle suggestions"
+        >
+          <FaBars className="w-5 h-5 text-gray-900" />
+        </button>
+
+        <h1 className="text-xl font-bold text-gray-900 select-none">Instagram</h1>
+        
+        <div className="w-9"></div> {/* Spacer for center alignment */}
+      </header>
+
+      {/* Overlay */}
+      {showSuggestions && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setShowSuggestions(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Suggestions Drawer */}
+      <div
+        className={`lg:hidden fixed top-14 right-0 h-screen w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          showSuggestions ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="p-4 h-full overflow-y-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-900">Suggestions for you</h2>
+            <button
+              onClick={() => setShowSuggestions(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Current User Profile */}
+          <div className="flex items-center justify-between mb-6 p-3 bg-gray-50 rounded-lg">
+            <div 
+              className="flex gap-3 items-center cursor-pointer"
+              onClick={() => onProfileClick({
+                username: 'sumithra',
+                avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
+                bio: 'Travel enthusiast 🌍 | Photography lover 📸',
+                posts: 127,
+                followers: 1245,
+                following: 389
+              })}
+            >
+              <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-yellow-400 via-red-500 to-pink-500">
+                <img 
+                  src="https://randomuser.me/api/portraits/women/30.jpg" 
+                  alt="Profile" 
+                  className="rounded-full w-full h-full object-cover border border-white"
+                />
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">sumithra</p>
+                <p className="text-xs text-gray-500">Your profile</p>
+              </div>
+            </div>
+            <button className="text-sm text-blue-500 font-semibold">
+              Switch
+            </button>
+          </div>
+
+          {/* Suggested Users */}
+          <div className="space-y-3">
+            {suggested.map(user => (
+              <div key={user.id} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                <div 
+                  className="flex gap-3 items-center cursor-pointer flex-1"
+                  onClick={() => onProfileClick(user)}
+                >
+                  <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-yellow-400 via-red-500 to-pink-500">
+                    <img 
+                      src={user.avatar} 
+                      alt={user.username} 
+                      className="rounded-full w-full h-full object-cover border border-white"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-gray-900">{user.username}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.bio || 'Suggested for you'}</p>
+                  </div>
+                </div>
+                <button 
+                  className={`text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors ${
+                    followStates[user.id] 
+                      ? 'bg-gray-200 text-gray-600 hover:bg-gray-300' 
+                      : 'bg-blue-500 text-white hover:bg-blue-600'
+                  }`}
+                  onClick={() => toggleFollow(user.id)}
+                >
+                  {followStates[user.id] ? 'Following' : 'Follow'}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-400 space-y-2">
+            <div className="flex flex-wrap gap-3">
+              <span>About</span>
+              <span>Help</span>
+              <span>Press</span>
+              <span>API</span>
+              <span>Jobs</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <span>Privacy</span>
+              <span>Terms</span>
+              <span>Locations</span>
+              <span>Language</span>
+            </div>
+            <p className="mt-4">© 2025 Instagram Clone</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
